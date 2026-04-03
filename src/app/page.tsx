@@ -410,14 +410,6 @@ export default function Home() {
             )}
           </div>
 
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => alert('In a real deployment this would link to a full Rightmove/Zoopla feed or dynamic CMS listings.\n\nAll current properties are shown above.')}
-              className="mx-auto flex h-12 items-center gap-x-2 rounded-3xl border border-slate-300 px-8 font-medium text-slate-700 hover:border-emerald-600"
-            >
-              View all listings on Rightmove / Zoopla
-            </button>
-          </div>
         </div>
       </section>
 
