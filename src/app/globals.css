@@ -1,21 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --color-page: #f7f4ef;
-  --color-panel: #ffffff;
-  --color-ink: #0f172a;
-  --color-muted: #5b6472;
-  --color-brand: #d6a33c;
-  --color-brand-deep: #a87514;
+  --primary: #0f172a;
 }
 
-@theme inline {
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-display);
+.tail-container * {
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+.heading-font {
+  font-family: 'Playfair Display', serif;
+}
+
+.hero-bg {
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
+    url('https://picsum.photos/id/1016/2000/1200') center/cover no-repeat;
+}
+
+.nav-link {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+  color: #10b981;
+  transform: translateY(-1px);
+}
+
+.property-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.property-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgb(16 185 129 / 0.45);
+}
+
+.section-header {
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 64px;
+  height: 3px;
+  background: #10b981;
+  border-radius: 9999px;
+}
+
+.property-img {
+  filter: blur(3px) brightness(0.95);
 }
 
 html {
@@ -24,23 +62,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-page);
-  color: var(--color-ink);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  color: #0f172a;
+  background: #ffffff;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-h1,
-h2,
-h3 {
-  text-wrap: balance;
-}
-
-p,
-li {
-  text-wrap: pretty;
 }
