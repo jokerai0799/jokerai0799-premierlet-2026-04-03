@@ -1,9 +1,138 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+
+type Property = {
+  id: number;
+  title: string;
+  type: 'house' | 'hmo' | 'maisonette';
+  beds: number;
+  price: number;
+  status: 'available' | 'let';
+  desc: string;
+  image: string;
+  location: string;
+};
+
+const DEFAULT_BLURRY_HOUSE_IMAGE = 'https://picsum.photos/id/1005/800/600';
+
+const propertiesData: Property[] = [
+  {
+    id: 1,
+    title: 'Trent Street, Gainsborough, DN21',
+    type: 'house',
+    beds: 4,
+    price: 600,
+    status: 'available',
+    desc: 'Spacious 4-bedroom terraced house with two living rooms, downstairs bathroom and enclosed rear garden.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Gainsborough',
+  },
+  {
+    id: 2,
+    title: 'Chesterfield Road South, Mansfield, NG19',
+    type: 'hmo',
+    beds: 6,
+    price: 2500,
+    status: 'available',
+    desc: 'Well-appointed care facility / HMO with permission for up to six residents. Lease terms negotiable.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Mansfield',
+  },
+  {
+    id: 3,
+    title: 'Stella Street, Mansfield, NG18',
+    type: 'hmo',
+    beds: 5,
+    price: 480,
+    status: 'available',
+    desc: 'Premium HMO – rooms £100–£120 pw including bills. Shared kitchen & bathroom, CCTV, town centre.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Mansfield',
+  },
+  {
+    id: 4,
+    title: 'Priestsic Road, Sutton in Ashfield, NG17',
+    type: 'hmo',
+    beds: 5,
+    price: 480,
+    status: 'available',
+    desc: 'Modern HMO with off-street parking, CCTV, bills included. Perfect for professionals or students.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Sutton in Ashfield',
+  },
+  {
+    id: 5,
+    title: 'Chaucer Street, Mansfield, NG18',
+    type: 'hmo',
+    beds: 4,
+    price: 440,
+    status: 'available',
+    desc: 'HMO rooms available with shared facilities, enclosed garden and town centre location.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Mansfield',
+  },
+  {
+    id: 6,
+    title: 'White Hart Street, Mansfield, NG18',
+    type: 'hmo',
+    beds: 5,
+    price: 500,
+    status: 'available',
+    desc: 'High-spec HMO with en-suite options, CCTV and weekly rates including all bills.',
+    image: DEFAULT_BLURRY_HOUSE_IMAGE,
+    location: 'Mansfield',
+  },
+];
+
 export default function Home() {
+  const [bedFilter, setBedFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
+  const [selectedInterest, setSelectedInterest] = useState<string[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+
+  const filteredProperties = useMemo(() => {
+    let filtered = [...propertiesData];
+
+    if (bedFilter) {
+      if (bedFilter === 'HMO') {
+        filtered = filtered.filter((p) => p.type === 'hmo');
+      } else {
+        const minBeds = parseInt(bedFilter, 10);
+        filtered = filtered.filter((p) => p.beds >= minBeds);
+      }
+    }
+
+    if (typeFilter) {
+      filtered = filtered.filter((p) => p.type === typeFilter);
+    }
+
+    return filtered;
+  }, [bedFilter, typeFilter]);
+
+  const toggleInterest = (value: string) => {
+    setSelectedInterest((current) =>
+      current.includes(value) ? current.filter((item) => item !== value) : [...current, value]
+    );
+  };
+
+  const resetFilters = () => {
+    setBedFilter('');
+    setTypeFilter('');
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    alert('✅ Thank you! Your message has been sent to PremierLet.\n\n(In production this would use Resend, EmailJS or a Next.js API route.)');
+    e.currentTarget.reset();
+    setSelectedInterest([]);
+  };
+
   return (
     <main className="tail-container min-h-screen bg-white text-slate-900">
       <nav className="sticky top-0 z-50 border-b bg-white shadow-sm">
         <div className="mx-auto max-w-screen-2xl px-6 py-5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-x-3">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-600">
                 <path d="M24 8L8 22V40H16V28H32V40H40V22L24 8Z" fill="currentColor" stroke="#0f172a" strokeWidth="3" strokeLinejoin="round" />
@@ -31,7 +160,7 @@ export default function Home() {
 
       <section id="home" className="hero-bg text-white">
         <div className="mx-auto max-w-screen-2xl px-6 py-28 sm:py-36">
-          <div className="max-w-3xl">
+          <div className="max-w-4xl">
             <span className="inline-flex rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-300 ring-1 ring-emerald-400/25">
               Premium letting & property management
             </span>
@@ -39,7 +168,7 @@ export default function Home() {
               Nottinghamshire&apos;s Premier Letting Agency
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200 sm:text-xl">
-              Quality homes, expert management, and dependable support for landlords and tenants across Nottinghamshire.
+              Quality homes, expert service, full tenant and landlord support across Nottinghamshire.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a href="#properties" className="rounded-full bg-emerald-500 px-7 py-4 text-center text-sm font-semibold text-white transition hover:bg-emerald-400">
@@ -49,194 +178,433 @@ export default function Home() {
                 Contact PremierLet
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-20">
-        <div className="mx-auto grid max-w-screen-2xl gap-8 px-6 lg:grid-cols-3">
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
-              <span className="text-xl">🏡</span>
+            <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-slate-200">
+              <div className="flex items-center gap-x-2">
+                <span className="text-emerald-300">✓</span>
+                <span>Quality homes</span>
+              </div>
+              <div className="h-6 w-px bg-white/30" />
+              <div className="flex items-center gap-x-2">
+                <span className="text-emerald-300">✓</span>
+                <span>Expert property management</span>
+              </div>
+              <div className="h-6 w-px bg-white/30" />
+              <div className="flex items-center gap-x-2">
+                <span className="text-emerald-300">✓</span>
+                <span>Gas & electrical safety certified</span>
+              </div>
             </div>
-            <h3 className="text-2xl font-semibold text-slate-900">Quality homes</h3>
-            <p className="mt-4 leading-7 text-slate-600">
-              Carefully managed rental properties with a focus on quality accommodation and a smoother tenant experience.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
-              <span className="text-xl">🛠️</span>
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-900">Full management</h3>
-            <p className="mt-4 leading-7 text-slate-600">
-              End-to-end landlord support including valuations, tenant sourcing, inspections, maintenance, and rent collection.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
-              <span className="text-xl">🤝</span>
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-900">Trusted support</h3>
-            <p className="mt-4 leading-7 text-slate-600">
-              Clear communication, tenant guidance, and responsive day-to-day support for both sides of the tenancy.
-            </p>
           </div>
         </div>
       </section>
 
       <section id="landlords" className="bg-slate-50 py-20">
-        <div className="mx-auto max-w-screen-2xl px-6">
-          <div className="max-w-3xl">
-            <h2 className="section-header inline-block text-4xl font-semibold text-slate-900">For landlords</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-600">
-              PremierLet began by managing Fraser Brown&apos;s own properties and grew through reputation, trust, and hands-on experience.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              "Rental valuation and tailored advice",
-              "Compliance and safety guidance",
-              "Tenant sourcing and accompanied viewings",
-              "Referencing, agreements, and tenancy setup",
-              "Inventories and check-in support",
-              "Monthly rent collection and statements",
-              "Property inspections and maintenance coordination",
-              "Renewals, check-out, and re-letting support",
-            ].map((item) => (
-              <div key={item} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <p className="font-medium leading-7 text-slate-700">{item}</p>
+        <div className="mx-auto max-w-screen-2xl px-6 md:px-12">
+          <div className="grid gap-16 md:grid-cols-12 md:items-center">
+            <div className="md:col-span-5">
+              <div className="sticky top-8">
+                <span className="text-sm font-semibold uppercase tracking-widest text-emerald-600">For Landlords</span>
+                <h2 className="heading-font mt-2 mb-6 text-5xl font-bold tracking-tighter text-slate-900">
+                  Let your property with complete confidence
+                </h2>
+                <p className="text-lg leading-relaxed text-slate-600">
+                  We handle everything — from marketing and tenant sourcing to rent collection and maintenance — so you enjoy maximum returns with zero hassle.
+                </p>
+                <div className="mt-8 flex items-center gap-3">
+                  <div className="text-4xl font-semibold text-emerald-600">10%</div>
+                  <div className="leading-none text-slate-500">
+                    management fee
+                    <br />
+                    <span className="text-sm">+ £100 arrangement fee</span>
+                  </div>
+                </div>
+                <a href="#contact" className="mt-8 inline-flex h-12 items-center justify-center rounded-3xl bg-slate-900 px-8 font-semibold text-white transition-colors hover:bg-emerald-600">
+                  Get a free rental valuation
+                </a>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl bg-slate-900 p-8 text-white">
-              <p className="text-sm uppercase tracking-[2px] text-emerald-300">Arrangement fee</p>
-              <p className="mt-3 text-4xl font-semibold">£100</p>
-              <p className="mt-3 text-slate-300">Each time the property is let to a new tenant.</p>
             </div>
-            <div className="rounded-3xl bg-emerald-600 p-8 text-white">
-              <p className="text-sm uppercase tracking-[2px] text-emerald-100">Management commission</p>
-              <p className="mt-3 text-4xl font-semibold">10%</p>
-              <p className="mt-3 text-emerald-50">Of rent collected, with regular statements and prompt payment.</p>
+
+            <div className="md:col-span-7">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="rounded-3xl bg-white p-8 shadow-sm">
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-3xl text-emerald-600">🔍</div>
+                  <h3 className="mb-2 text-xl font-semibold">Full Property Management</h3>
+                  <ul className="space-y-4 text-[15px] text-slate-600">
+                    {[
+                      'Tenant sourcing & viewings',
+                      'Comprehensive referencing',
+                      'Monthly rent collection + statements',
+                      'Regular inspections & repairs',
+                      'End-of-tenancy management',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="mt-1 text-xs text-emerald-500">✓</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col rounded-3xl bg-white p-8 shadow-sm">
+                  <div className="flex-1">
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-3xl text-emerald-600">📋</div>
+                    <h3 className="mb-2 text-xl font-semibold">Compliance & Protection</h3>
+                    <p className="text-slate-600">
+                      Gas Safety, NICEIC electrical certification, deposit protection, and specialist landlord insurance advice.
+                    </p>
+                  </div>
+                  <div className="mt-auto flex items-center justify-between border-t pt-8 text-sm">
+                    <div>Multi-property discounts</div>
+                    <div className="font-semibold text-emerald-600">Available</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-8 rounded-3xl bg-white p-8 text-slate-700 shadow-sm sm:col-span-2">
+                  <div>
+                    <div className="text-6xl font-semibold text-emerald-600">£100</div>
+                    <div className="text-xs uppercase tracking-widest">Arrangement fee per new tenancy</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl text-emerald-600">+ 10% of rent collected</div>
+                    <div className="mt-1 text-sm text-slate-400">Monthly payments direct to your bank</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="tenants" className="bg-white py-20">
-        <div className="mx-auto grid max-w-screen-2xl gap-12 px-6 lg:grid-cols-[1fr_0.9fr]">
-          <div>
-            <h2 className="section-header inline-block text-4xl font-semibold text-slate-900">For tenants</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-600">
-              PremierLet provides clear tenancy guidance, properly managed properties, and responsive support throughout your tenancy.
-            </p>
-            <div className="mt-10 grid gap-4">
-              {[
-                "Gas Safety Certificates and electrical safety checks on managed homes",
-                "Deposits held in a dedicated client account",
-                "24/7 helpline for urgent issues",
-                "Clear communication between tenant and landlord",
-              ].map((item) => (
-                <div key={item} className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-700">
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
+      <section id="tenants" className="py-20">
+        <div className="mx-auto max-w-screen-2xl px-6 md:px-12">
+          <div className="flex flex-col gap-16 md:flex-row">
+            <div className="flex-1">
+              <span className="text-sm font-semibold uppercase tracking-widest text-emerald-600">For Tenants</span>
+              <h2 className="heading-font mt-2 mb-6 text-5xl font-bold tracking-tighter text-slate-900">Your home, our priority</h2>
+              <div className="text-slate-600">
+                <p className="text-lg">
+                  We make renting simple, secure, and supported. Every property is fully compliant, deposits are protected, and you have 24/7 access to our team.
+                </p>
+              </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
-            <h3 className="text-2xl font-semibold text-slate-900">Fees & payments</h3>
-            <ul className="mt-6 space-y-4 text-slate-600">
-              <li>• One month&apos;s rent is payable in advance at the start of the tenancy.</li>
-              <li>• A security deposit equal to one month&apos;s rent is payable at move-in.</li>
-              <li>• Holding deposits are usually equal to one week&apos;s rent.</li>
-              <li>• If the tenancy proceeds, the holding deposit is deducted from the balance due.</li>
-              <li>• Deposits are returned after the tenancy ends, subject to checks and any agreed deductions.</li>
-            </ul>
+              <div className="mt-12 space-y-8">
+                {[
+                  {
+                    number: '01',
+                    title: 'Find & apply in minutes',
+                    text: 'Browse our portfolio. Pay a small holding deposit to secure your new home. Full referencing completed swiftly.',
+                  },
+                  {
+                    number: '02',
+                    title: 'Move in stress-free',
+                    text: 'Detailed video + written inventory. Utilities transferred. Clear communication from day one.',
+                  },
+                  {
+                    number: '03',
+                    title: '24/7 support throughout',
+                    text: 'Urgent repairs? Maintenance request? We’re here. We act as the bridge between you and your landlord.',
+                  },
+                ].map((step) => (
+                  <div key={step.number} className="flex gap-6">
+                    <div className="font-mono text-7xl font-bold text-emerald-200">{step.number}</div>
+                    <div>
+                      <h4 className="text-xl font-semibold">{step.title}</h4>
+                      <p className="text-slate-500">{step.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col justify-between rounded-3xl bg-slate-900 p-10 text-white">
+              <div>
+                <div className="mb-8 flex items-center justify-between">
+                  <h3 className="text-3xl font-semibold">Tenant benefits</h3>
+                  <div className="text-6xl text-emerald-400">🛡️</div>
+                </div>
+                <ul className="space-y-6">
+                  {[
+                    ['Deposit held safely', 'Client money account'],
+                    ['Fully certified properties', 'Gas & electrical safety'],
+                    ['24/7 emergency helpline', 'Always answered'],
+                    ['Transparent fees only', 'No hidden costs'],
+                  ].map(([label, value], index) => (
+                    <li key={label} className={`flex justify-between ${index < 3 ? 'border-b border-white/10 pb-6' : ''}`}>
+                      <span className="text-emerald-300">{label}</span>
+                      <span className="font-medium">{value}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-10 rounded-3xl bg-white/10 p-6 text-sm backdrop-blur">
+                Holding deposit = 1 week’s rent. Security deposit = 1 month’s rent. One month’s rent in advance.
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="properties" className="bg-slate-50 py-20">
-        <div className="mx-auto max-w-screen-2xl px-6">
-          <div className="max-w-3xl">
-            <h2 className="section-header inline-block text-4xl font-semibold text-slate-900">Featured properties</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-600">
-              A cleaner property presentation for available homes, HMOs, and specialist listings.
-            </p>
+        <div className="mx-auto max-w-screen-2xl px-6 md:px-12">
+          <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <span className="text-sm font-semibold uppercase tracking-widest text-emerald-600">Available now</span>
+              <h2 className="heading-font text-5xl font-bold tracking-tighter text-slate-900">Properties to rent in Nottinghamshire</h2>
+            </div>
+
+            <div className="hidden items-center gap-x-4 text-sm md:flex">
+              <select value={bedFilter} onChange={(e) => setBedFilter(e.target.value)} className="h-11 rounded-3xl border border-slate-200 bg-white px-5 focus:border-emerald-300 focus:outline-none">
+                <option value="">Any bedrooms</option>
+                <option value="2">2 bedrooms</option>
+                <option value="3">3 bedrooms</option>
+                <option value="4">4+ bedrooms</option>
+                <option value="HMO">HMO / Rooms</option>
+              </select>
+
+              <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="h-11 rounded-3xl border border-slate-200 bg-white px-5 focus:border-emerald-300 focus:outline-none">
+                <option value="">All types</option>
+                <option value="house">House</option>
+                <option value="hmo">HMO</option>
+                <option value="maisonette">Maisonette</option>
+              </select>
+
+              <button onClick={resetFilters} className="flex cursor-pointer items-center gap-1 text-sm font-medium text-slate-400 hover:text-slate-600">
+                Clear
+              </button>
+            </div>
           </div>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            {[
-              {
-                title: "Trent Street, Gainsborough",
-                type: "4 Bedroom Terraced Property",
-                price: "Available — £600 PCM",
-                bullets: ["2 living rooms", "Downstairs bathroom", "Enclosed rear garden"],
-              },
-              {
-                title: "Chesterfield Road South, Mansfield",
-                type: "Care Facility",
-                price: "Available — £2,500 PCM",
-                bullets: ["Class C3(B) permission", "Up to six residents", "Lease terms negotiable"],
-              },
-              {
-                title: "White Hart Street, Mansfield",
-                type: "HMO Rooms",
-                price: "£100–£120 per week incl. bills",
-                bullets: ["En-suite rooms available", "Town centre location", "Bills included"],
-              },
-            ].map((property, index) => (
-              <article key={property.title} className="property-card overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-                <div className="property-img h-64 bg-cover bg-center" style={{ backgroundImage: `url(https://picsum.photos/seed/premierlet-${index + 1}/900/700)` }} />
-                <div className="p-7">
-                  <p className="text-sm font-medium uppercase tracking-[2px] text-emerald-600">Featured listing</p>
-                  <h3 className="mt-3 text-2xl font-semibold text-slate-900">{property.title}</h3>
-                  <p className="mt-2 text-slate-500">{property.type}</p>
-                  <ul className="mt-5 space-y-2 text-slate-600">
-                    {property.bullets.map((bullet) => (
-                      <li key={bullet}>• {bullet}</li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 border-t pt-5">
-                    <p className="text-lg font-semibold text-slate-900">{property.price}</p>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredProperties.length > 0 ? (
+              filteredProperties.map((prop) => (
+                <button key={prop.id} onClick={() => setSelectedProperty(prop)} className="property-card overflow-hidden rounded-3xl border border-transparent bg-white text-left">
+                  <div className="relative">
+                    <img src={prop.image} alt={prop.title} className="property-img h-56 w-full object-cover" />
+                    <div className="absolute top-4 right-4 flex h-7 items-center rounded-3xl bg-white px-4 text-xs font-semibold text-emerald-600 shadow">
+                      £{prop.price} pcm
+                    </div>
+                    {prop.status === 'available' ? (
+                      <div className="absolute top-4 left-4 flex h-7 items-center rounded-3xl bg-emerald-500 px-3 text-xs font-medium text-white">
+                        AVAILABLE NOW
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="p-6">
+                    <div className="text-lg font-semibold">{prop.title}</div>
+                    <div className="mt-1 flex items-center gap-x-3 text-sm text-slate-500">
+                      <span>{prop.beds} bed {prop.type}</span>
+                      <span className="h-1 w-1 rounded-full bg-slate-400" />
+                      <span>{prop.location}</span>
+                    </div>
+                    <p className="mt-4 line-clamp-2 text-sm text-slate-500">{prop.desc}</p>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center text-slate-400">
+                No properties match your filters yet.
+                <br />
+                Try broadening your search.
+              </div>
+            )}
+          </div>
+
+          <div className="mt-12 text-center">
+            <button
+              onClick={() => alert('In a real deployment this would link to a full Rightmove/Zoopla feed or dynamic CMS listings.\n\nAll current properties are shown above.')}
+              className="mx-auto flex h-12 items-center gap-x-2 rounded-3xl border border-slate-300 px-8 font-medium text-slate-700 hover:border-emerald-600"
+            >
+              View all listings on Rightmove / Zoopla
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="py-20">
+        <div className="mx-auto max-w-screen-2xl px-6 md:px-12">
+          <div className="grid gap-16 md:grid-cols-12">
+            <div className="md:col-span-5">
+              <h2 className="heading-font mb-6 text-5xl font-bold tracking-tighter text-slate-900">Let&apos;s find your perfect match</h2>
+              <p className="text-lg text-slate-600">
+                Whether you&apos;re a landlord looking to let or a tenant searching for a home, our friendly team is ready to help.
+              </p>
+
+              <div className="mt-12 space-y-8">
+                <div className="flex items-start gap-6">
+                  <div className="w-8 text-3xl text-emerald-600">☎</div>
+                  <div>
+                    <div className="font-semibold">Call us</div>
+                    <a href="tel:01159654919" className="text-3xl font-medium">0115 965 4919</a>
+                    <div className="mt-1 text-xs text-slate-400">
+                      or mobile <a href="tel:07813694659" className="underline">07813 694659</a>
+                    </div>
                   </div>
                 </div>
-              </article>
-            ))}
+
+                <div className="flex items-start gap-6">
+                  <div className="w-8 text-3xl text-emerald-600">✉</div>
+                  <div>
+                    <div className="font-semibold">Email</div>
+                    <a href="mailto:info@premierlet.co.uk" className="text-xl hover:underline">info@premierlet.co.uk</a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-6">
+                  <div className="w-8 text-3xl text-emerald-600">📍</div>
+                  <div>
+                    <div className="font-semibold">Visit us</div>
+                    <div className="text-slate-600">
+                      Long Ridge, School Lane
+                      <br />
+                      Eakring, Nottinghamshire NG22 0DE
+                    </div>
+                    <div className="mt-4 text-xs text-slate-400">
+                      Alternative correspondence:
+                      <br />
+                      Field House, Bathley Lane, Little Carlton, Newark NG23 6BY
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-white p-10 shadow-xl md:col-span-7">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">Name</label>
+                    <input type="text" required className="w-full rounded-2xl border border-slate-200 px-6 py-4 outline-none focus:border-emerald-300" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">Email</label>
+                    <input type="email" required className="w-full rounded-2xl border border-slate-200 px-6 py-4 outline-none focus:border-emerald-300" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">I&apos;m interested in</label>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    {['Becoming a landlord', 'Renting a home', 'General enquiry'].map((item) => {
+                      const active = selectedInterest.includes(item);
+                      return (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => toggleInterest(item)}
+                          className={`flex-1 rounded-3xl border py-4 text-center text-sm font-medium transition-colors ${
+                            active ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">Message</label>
+                  <textarea rows={5} className="w-full resize-none rounded-3xl border border-slate-200 px-6 py-4 outline-none focus:border-emerald-300" />
+                </div>
+
+                <button type="submit" className="flex h-14 w-full items-center justify-center gap-x-3 rounded-3xl bg-emerald-600 text-lg font-semibold text-white transition-all hover:bg-emerald-700">
+                  SEND MESSAGE
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="contact" className="bg-slate-900 py-20 text-white">
-        <div className="mx-auto max-w-screen-2xl px-6">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr]">
-            <div>
-              <h2 className="section-header inline-block text-4xl font-semibold text-white">Contact PremierLet</h2>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                Speak to PremierLet about available properties, landlord services, or full property management support.
+      <footer className="bg-slate-900 text-slate-400">
+        <div className="mx-auto max-w-screen-2xl px-6 pb-8 pt-16 md:px-12">
+          <div className="grid gap-y-10 md:grid-cols-12">
+            <div className="md:col-span-4">
+              <div className="mb-4 flex items-center gap-x-3 text-white">
+                <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-600">
+                  <path d="M24 8L8 22V40H16V28H32V40H40V22L24 8Z" fill="currentColor" stroke="#0f172a" strokeWidth="3" strokeLinejoin="round" />
+                  <path d="M20 28H28V40H20V28Z" fill="#0f172a" />
+                  <circle cx="24" cy="18" r="3" fill="#fff" />
+                </svg>
+                <span className="heading-font text-4xl font-bold tracking-tighter">PremierLet</span>
+              </div>
+              <p className="max-w-xs text-slate-300">
+                Premium letting & management in Nottinghamshire. Founded on 10+ years of hands-on landlord expertise.
               </p>
+              <div className="mt-8 flex gap-x-6 text-xs">
+                <div>© 2026 PremierLet</div>
+                <div className="cursor-pointer hover:text-white">Privacy & Cookies</div>
+              </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                <p className="text-sm uppercase tracking-[2px] text-slate-300">Phone</p>
-                <p className="mt-3 text-xl font-semibold">01159 654 919</p>
+
+            <div className="md:col-span-2">
+              <div className="mb-6 text-xs font-semibold uppercase text-emerald-300">Company</div>
+              <a href="#landlords" className="block py-2 hover:text-white">For Landlords</a>
+              <a href="#tenants" className="block py-2 hover:text-white">For Tenants</a>
+              <a href="#properties" className="block py-2 hover:text-white">Properties</a>
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="mb-6 text-xs font-semibold uppercase text-emerald-300">Quick links</div>
+              <a href="#" className="block py-2 hover:text-white">How we work</a>
+              <a href="#" className="block py-2 hover:text-white">Fees explained</a>
+              <a href="#" className="block py-2 hover:text-white">Tenant guides</a>
+            </div>
+
+            <div className="md:col-span-4">
+              <div className="rounded-3xl bg-slate-800 p-6 text-sm text-white">
+                <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row">
+                  <div>
+                    Long Ridge, School Lane
+                    <br />
+                    Eakring NG22 0DE
+                  </div>
+                  <div className="text-left sm:text-right">
+                    0115 965 4919
+                    <br />
+                    info@premierlet.co.uk
+                  </div>
+                </div>
+                <div className="text-xs font-medium text-emerald-400">Open Monday–Friday 9am–5:30pm • 24/7 emergency tenant line</div>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                <p className="text-sm uppercase tracking-[2px] text-slate-300">Email</p>
-                <p className="mt-3 text-xl font-semibold">info@premierlet.co.uk</p>
+            </div>
+          </div>
+
+          <div className="mt-12 border-t border-slate-800 pt-8 text-center text-[10px] text-slate-500">
+            This is a fully functional, Vercel-ready Next.js + Tailwind proposal. Hero uses a new-build property background, custom PremierLet branding, and blurry house stock imagery for listings.
+          </div>
+        </div>
+      </footer>
+
+      {selectedProperty ? (
+        <div onClick={() => setSelectedProperty(null)} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4">
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl overflow-hidden rounded-3xl bg-white">
+            <div className="p-8">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-3xl font-semibold">{selectedProperty.title}</h2>
+                  <p className="mt-1 text-4xl font-light text-emerald-600">£{selectedProperty.price} pcm</p>
+                </div>
+                <button onClick={() => setSelectedProperty(null)} className="text-4xl leading-none text-slate-300 hover:text-slate-500">×</button>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-6 sm:col-span-2">
-                <p className="text-sm uppercase tracking-[2px] text-slate-300">Address</p>
-                <p className="mt-3 text-xl font-semibold">Long Ridge, School Lane, Eakring, NG22 0DE</p>
+              <img src={selectedProperty.image} className="property-img my-8 h-80 w-full rounded-3xl object-cover" alt={selectedProperty.title} />
+              <div className="grid grid-cols-1 gap-4 text-center text-sm sm:grid-cols-3">
+                <div className="rounded-3xl bg-slate-100 py-4"><strong>{selectedProperty.beds}</strong> bedrooms</div>
+                <div className="rounded-3xl bg-slate-100 py-4">Fully compliant</div>
+                <div className="rounded-3xl bg-slate-100 py-4">Deposit protected</div>
+              </div>
+              <p className="mt-8">{selectedProperty.desc}</p>
+              <div className="mt-10 flex gap-4">
+                <button onClick={() => setSelectedProperty(null)} className="flex-1 rounded-3xl border border-slate-300 py-6 font-medium text-slate-400">Close</button>
+                <a href="#contact" onClick={() => setSelectedProperty(null)} className="flex-1 rounded-3xl bg-emerald-600 py-6 text-center font-semibold text-white">
+                  Apply now or book viewing
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      ) : null}
     </main>
   );
 }
