@@ -218,8 +218,8 @@ export default function Home() {
                     <span className="text-sm">+ £100 arrangement fee</span>
                   </div>
                 </div>
-                <a href="#contact" className="mt-8 inline-flex h-12 items-center justify-center rounded-3xl bg-slate-900 px-8 font-semibold text-white transition-colors hover:bg-emerald-600">
-                  Get a free rental valuation
+                <a href="#contact" className="mt-8 inline-flex h-12 items-center justify-center rounded-3xl bg-slate-900 px-8 text-center font-semibold text-white transition-colors hover:bg-emerald-600">
+                  <span className="text-white">Get a free rental valuation</span>
                 </a>
               </div>
             </div>
