@@ -14,6 +14,7 @@ const libre = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://premierlet.vercel.app"),
   title: "PremierLet | Nottinghamshire Lettings & Property Management",
   description:
     "A modern website concept for PremierLet inspired by the cleaner structure and presentation of premium UK lettings brands.",
