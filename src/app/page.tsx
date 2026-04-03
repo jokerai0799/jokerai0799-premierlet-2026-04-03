@@ -46,7 +46,7 @@ const propertiesData: Property[] = [
     beds: 5,
     price: 480,
     status: 'available',
-    desc: 'Premium HMO – rooms £100–£120 pw including bills. Shared kitchen & bathroom, CCTV, town centre.',
+    desc: 'Premium HMO rooms from £100 to £120 per week including bills. Shared kitchen and bathroom, CCTV, and a town centre location.',
     image: DEFAULT_BLURRY_HOUSE_IMAGE,
     location: 'Mansfield',
   },
@@ -123,7 +123,7 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('✅ Thank you! Your message has been sent to PremierLet.\n\n(In production this would use Resend, EmailJS or a Next.js API route.)');
+    alert('✅ Thank you! Your message has been sent to PremierLet.');
     e.currentTarget.reset();
     setSelectedInterest([]);
   };
@@ -208,7 +208,7 @@ export default function Home() {
                   Let your property with complete confidence
                 </h2>
                 <p className="text-lg leading-relaxed text-slate-600">
-                  We handle everything — from marketing and tenant sourcing to rent collection and maintenance — so you enjoy maximum returns with zero hassle.
+                  We handle everything from marketing and tenant sourcing to rent collection and maintenance, so you enjoy maximum returns with zero hassle.
                 </p>
                 <div className="mt-8 flex items-center gap-3">
                   <div className="text-4xl font-semibold text-emerald-600">10%</div>
@@ -532,7 +532,7 @@ export default function Home() {
                     info@premierlet.co.uk
                   </div>
                 </div>
-                <div className="text-xs font-medium text-emerald-400">Open Monday–Friday 9am–5:30pm • 24/7 emergency tenant line</div>
+                <div className="text-xs font-medium text-emerald-400">Open Monday to Friday, 9am to 5:30pm • 24/7 emergency tenant line</div>
               </div>
             </div>
           </div>
