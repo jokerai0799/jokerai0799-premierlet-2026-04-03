@@ -445,16 +445,11 @@ export default function Home() {
                 <div className="flex items-start gap-6">
                   <div className="w-8 text-3xl text-emerald-600">📍</div>
                   <div>
-                    <div className="font-semibold">Visit us</div>
+                    <div className="font-semibold">Location</div>
                     <div className="text-slate-600">
                       Long Ridge, School Lane
                       <br />
                       Eakring, Nottinghamshire NG22 0DE
-                    </div>
-                    <div className="mt-4 text-xs text-slate-400">
-                      Alternative correspondence:
-                      <br />
-                      Field House, Bathley Lane, Little Carlton, Newark NG23 6BY
                     </div>
                   </div>
                 </div>
@@ -471,27 +466,6 @@ export default function Home() {
                   <div>
                     <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">Email</label>
                     <input type="email" required className="w-full rounded-2xl border border-slate-200 px-6 py-4 outline-none focus:border-emerald-300" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-xs uppercase tracking-widest text-slate-500">I&apos;m interested in</label>
-                  <div className="flex flex-col gap-2 sm:flex-row">
-                    {['Becoming a landlord', 'Renting a home', 'General enquiry'].map((item) => {
-                      const active = selectedInterest.includes(item);
-                      return (
-                        <button
-                          key={item}
-                          type="button"
-                          onClick={() => toggleInterest(item)}
-                          className={`flex-1 rounded-3xl border py-4 text-center text-sm font-medium transition-colors ${
-                            active ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-200 text-slate-700'
-                          }`}
-                        >
-                          {item}
-                        </button>
-                      );
-                    })}
                   </div>
                 </div>
 
@@ -563,9 +537,6 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 border-t border-slate-800 pt-8 text-center text-[10px] text-slate-500">
-            This is a fully functional, Vercel-ready Next.js + Tailwind proposal. Hero uses a new-build property background, custom PremierLet branding, and blurry house stock imagery for listings.
-          </div>
         </div>
       </footer>
 
