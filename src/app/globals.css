@@ -15,8 +15,8 @@
 
 .hero-bg {
   background:
-    linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
-    url('https://picsum.photos/id/1016/2000/1200') center/cover no-repeat;
+    linear-gradient(rgba(15, 23, 42, 0.62), rgba(15, 23, 42, 0.62)),
+    url('/hero-house.jpg') center 38% / cover no-repeat;
 }
 
 .nav-link {
