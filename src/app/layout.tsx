@@ -17,6 +17,27 @@ export const metadata: Metadata = {
   title: "PremierLet | Nottinghamshire Lettings & Property Management",
   description:
     "A modern website concept for PremierLet inspired by the cleaner structure and presentation of premium UK lettings brands.",
+  openGraph: {
+    title: "PremierLet | Nottinghamshire Lettings & Property Management",
+    description:
+      "Quality homes, expert service, and full tenant and landlord support across Nottinghamshire.",
+    images: [
+      {
+        url: "/og-preview.jpg",
+        width: 1200,
+        height: 630,
+        alt: "PremierLet website preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PremierLet | Nottinghamshire Lettings & Property Management",
+    description:
+      "Quality homes, expert service, and full tenant and landlord support across Nottinghamshire.",
+    images: ["/og-preview.jpg"],
+  },
 };
 
 export default function RootLayout({
